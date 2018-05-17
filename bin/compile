@@ -52,8 +52,8 @@ if ! [ $? ]; then
     exit 1
 fi
 
-NGINX_BUILDPACK_DIR=$(mktemp -td nginx_buildpack.XXXXX)
-NODEJS_BUILDPACK_DIR=$(mktemp -td nodejs_buildpack.XXXXX)
+NGINX_BUILDPACK_DIR=$(mktemp -d -t nginx_buildpack)
+NODEJS_BUILDPACK_DIR=$(mktemp -d -t nodejs_buildpack)
 
 curl -Lk 'https://github.com/heroku/heroku-buildpack-nginx/archive/master.tar.gz' | tar xz -C ${NGINX_BUILDPACK_DIR} --strip 1
 curl -Lk 'https://github.com/heroku/heroku-buildpack-nodejs/archive/master.tar.gz' | tar xz -C ${NODEJS_BUILDPACK_DIR} --strip 1
