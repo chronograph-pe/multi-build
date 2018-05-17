@@ -60,4 +60,6 @@ curl -Lk 'https://github.com/heroku/heroku-buildpack-nodejs/archive/master.tar.g
 
 sh "${NGINX_BUILDPACK_DIR}/bin/compile" "${BUILD_DIR}" "${CACHE_DIR}" "${ENV_DIR}"
 
+sh "${NODEJS_BUILDPACK_DIR}/bin/compile" "${BUILD_DIR}" "${CACHE_DIR}" "${ENV_DIR}"
+
 echo "Copied successfully." | indent
