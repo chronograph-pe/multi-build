@@ -1,0 +1,33 @@
+#!/usr/bin/env bash
+
+indent() {
+    sed -u 's/^/      /'
+}
+
+BUILD_DIR=$1
+CACHE_DIR=$2
+ENV_DIR=$3
+
+PROCFILE=$(cat ${ENV_DIR}/PROCFILE)
+NGIXCONF=$(cat ${ENV_DIR}/NGINXCONF)
+
+if [[ -z "${PROCFILE}" ]]; then
+    echo "PROCFILE was not set. Aborting" | indent
+    exit 1
+fi
+
+if [[ -z "${NGINXCONF}" ]]; then
+    echo "NGINXCONF was not set. Aborting" | indent
+    exit 1
+fi
+
+cp ${BUILD_DIR}/${PROCFILE} ${BUILD_DIR}/Procfile
+
+if ! [ $? ]; then
+    echo "FAILED to copy a Procfile" | indent
+    exit 1
+fi
+
+cp ${BUILD_DIR}/${NGINXCONF} ${BUILD_DIR}/config/locales/nginx.conf.erb
+
+echo "Copied ${NGINX} as nginx.conf.erb successfully" | indent
