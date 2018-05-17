@@ -12,9 +12,8 @@ PROCFILE=$(cat ${ENV_DIR}/PROCFILE)
 NGINXCONF=$(cat ${ENV_DIR}/NGINXCONF)
 POSTDEPLOY=$(cat ${ENV_DIR}/POSTDEPLOY)
 
-HEROKU_APP_NAME=$(HEROKU_APP_NAME)
 echo "multi-build"
-echo HEROKU_APP_NAME
+echo "${HEROKU_APP_NAME}"
 
 if [[ -z "${PROCFILE}" ]]; then
     echo "PROCFILE was not set. Aborting" | indent
