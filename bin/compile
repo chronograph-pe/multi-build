@@ -12,6 +12,9 @@ PROCFILE=$(cat ${ENV_DIR}/PROCFILE)
 NGINXCONF=$(cat ${ENV_DIR}/NGINXCONF)
 POSTDEPLOY=$(cat ${ENV_DIR}/POSTDEPLOY)
 
+echo "multi-build"
+echo HEROKU_APP_NAME
+
 if [[ -z "${PROCFILE}" ]]; then
     echo "PROCFILE was not set. Aborting" | indent
     exit 1
@@ -47,5 +50,8 @@ if ! [ $? ]; then
     echo "FAILED to copy postdeploy.sh" | indent
     exit 1
 fi
+
+heroku buildpacks:set --index 2 https://github.com/heroku/heroku-buildpack-nginx.git -a HEROKU_APP_NAME
+heroku buildpacks:set --index 3 heroku/nodejs -a HEROKU_APP_NAME
 
 echo "Copied successfully." | indent
