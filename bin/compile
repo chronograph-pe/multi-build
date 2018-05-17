@@ -52,14 +52,4 @@ if ! [ $? ]; then
     exit 1
 fi
 
-NGINX_BUILDPACK_DIR=$(mktemp -d -t nginx_buildpack.XXXXX)
-NODEJS_BUILDPACK_DIR=$(mktemp -d -t nodejs_buildpack.XXXXX)
-
-curl -Lk 'https://github.com/heroku/heroku-buildpack-nginx/archive/master.tar.gz' | tar xz -C ${NGINX_BUILDPACK_DIR} --strip 1
-curl -Lk 'https://github.com/heroku/heroku-buildpack-nodejs/archive/master.tar.gz' | tar xz -C ${NODEJS_BUILDPACK_DIR} --strip 1
-
-sh "${NGINX_BUILDPACK_DIR}/bin/compile" ${BUILD_DIR} ${CACHE_DIR} ${ENV_DIR}
-
-sh "${NODEJS_BUILDPACK_DIR}/bin/compile" ${BUILD_DIR} ${CACHE_DIR} ${ENV_DIR}
-
 echo "Copied successfully." | indent
