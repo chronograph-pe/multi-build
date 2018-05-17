@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 indent() {
-    sed -u 's/^/      /'
+    sed -u 's/^/       /'
 }
 
 BUILD_DIR=$1
@@ -52,7 +52,12 @@ if ! [ $? ]; then
     exit 1
 fi
 
-# heroku buildpacks:set --index 2 https://github.com/heroku/heroku-buildpack-nginx.git -a HEROKU_APP_NAME
-# heroku buildpacks:set --index 3 heroku/nodejs -a HEROKU_APP_NAME
+NGINX_BUILDPACK_DIR=$(mktemp -td nginx_buildpack.XXXXX)
+NODEJS_BUILDPACK_DIR=$(mktemp -td nodejs_buildpack.XXXXX)
+
+curl -Lk 'https://github.com/heroku/heroku-buildpack-nginx/archive/master.tar.gz' | tar xz -C "${NGINX_BUILDPACK_DIR}" --strip 1
+curl -Lk 'https://github.com/heroku/heroku-buildpack-nodejs/archive/master.tar.gz' | tar xz -C "${NODEJS_BUILDPACK_DIR}" --strip 1
+
+sh "${NGINX_BUILDPACK_DIR}/bin/compile" "${BUILD_DIR}" "${CACHE_DIR}" "${ENV_DIR}"
 
 echo "Copied successfully." | indent
