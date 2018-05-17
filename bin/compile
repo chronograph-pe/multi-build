@@ -10,6 +10,7 @@ ENV_DIR=$3
 
 PROCFILE=$(cat ${ENV_DIR}/PROCFILE)
 NGINXCONF=$(cat ${ENV_DIR}/NGINXCONF)
+POSTDEPLOY=$(cat ${ENV_DIR}/POSTDEPLOY)
 
 if [[ -z "${PROCFILE}" ]]; then
     echo "PROCFILE was not set. Aborting" | indent
@@ -18,6 +19,11 @@ fi
 
 if [[ -z "${NGINXCONF}" ]]; then
     echo "NGINXCONF was not set. Aborting" | indent
+    exit 1
+fi
+
+if [[ -z "${POSTDEPLOY}" ]]; then
+    echo "POSTDEPLOY was not set. Aborting" | indent
     exit 1
 fi
 
@@ -32,6 +38,13 @@ cp ${BUILD_DIR}/${NGINXCONF} ${BUILD_DIR}/config/nginx.conf.erb
 
 if ! [ $? ]; then
     echo "FAILED to copy nginx.conf.erb" | indent
+    exit 1
+fi
+
+cp ${BUILD_DIR}/${POSTDEPLOY} ${BUILD_DIR}/postdeploy.sh
+
+if ! [ $? ]; then
+    echo "FAILED to copy postdeploy.sh" | indent
     exit 1
 fi
 
