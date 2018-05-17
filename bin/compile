@@ -9,7 +9,7 @@ CACHE_DIR=$2
 ENV_DIR=$3
 
 PROCFILE=$(cat ${ENV_DIR}/PROCFILE)
-NGIXCONF=$(cat ${ENV_DIR}/NGINXCONF)
+NGINXCONF=$(cat ${ENV_DIR}/NGINXCONF)
 
 if [[ -z "${PROCFILE}" ]]; then
     echo "PROCFILE was not set. Aborting" | indent
@@ -24,10 +24,15 @@ fi
 cp ${BUILD_DIR}/${PROCFILE} ${BUILD_DIR}/Procfile
 
 if ! [ $? ]; then
-    echo "FAILED to copy a Procfile" | indent
+    echo "FAILED to copy Procfile" | indent
     exit 1
 fi
 
-cp ${BUILD_DIR}/${NGINXCONF} ${BUILD_DIR}/config/locales/nginx.conf.erb
+cp ${BUILD_DIR}/${NGINXCONF} ${BUILD_DIR}/config/nginx.conf.erb
 
-echo "Copied ${NGINX} as nginx.conf.erb successfully" | indent
+if ! [ $? ]; then
+    echo "FAILED to copy nginx.conf.erb" | indent
+    exit 1
+fi
+
+echo "Copied successfully." | indent
