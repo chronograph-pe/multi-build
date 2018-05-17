@@ -8,47 +8,42 @@ BUILD_DIR=$1
 CACHE_DIR=$2
 ENV_DIR=$3
 
-PROCFILE=$(cat ${ENV_DIR}/PROCFILE)
-NGINXCONF=$(cat ${ENV_DIR}/NGINXCONF)
-POSTDEPLOY=$(cat ${ENV_DIR}/POSTDEPLOY)
+APP_REFERENCE=$(cat ${ENV_DIR}/APP_REFERENCE)
 HEROKU_APP_NAME=$(cat ${ENV_DIR}/HEROKU_APP_NAME)
 
 echo "multi-build"
 echo ${HEROKU_APP_NAME}
 
-if [[ -z "${PROCFILE}" ]]; then
-    echo "PROCFILE was not set. Aborting" | indent
+if [[ -z "${APP_REFERENCE}" ]]; then
+    echo "APP_REFERENCE was not set. Aborting" | indent
     exit 1
 fi
 
-if [[ -z "${NGINXCONF}" ]]; then
-    echo "NGINXCONF was not set. Aborting" | indent
-    exit 1
-fi
-
-if [[ -z "${POSTDEPLOY}" ]]; then
-    echo "POSTDEPLOY was not set. Aborting" | indent
-    exit 1
-fi
-
-cp ${BUILD_DIR}/${PROCFILE} ${BUILD_DIR}/Procfile
+cp ${BUILD_DIR}/reference/${APP_REFERENCE}/Procfile ${BUILD_DIR}/Procfile
 
 if ! [ $? ]; then
     echo "FAILED to copy Procfile" | indent
     exit 1
 fi
 
-cp ${BUILD_DIR}/${NGINXCONF} ${BUILD_DIR}/config/nginx.conf.erb
+cp ${BUILD_DIR}/reference/${APP_REFERENCE}/nginx.conf.erb ${BUILD_DIR}/config/nginx.conf.erb
 
 if ! [ $? ]; then
     echo "FAILED to copy nginx.conf.erb" | indent
     exit 1
 fi
 
-cp ${BUILD_DIR}/${POSTDEPLOY} ${BUILD_DIR}/postdeploy.sh
+cp ${BUILD_DIR}/reference/${APP_REFERENCE}/postdeploy.sh ${BUILD_DIR}/postdeploy.sh
 
 if ! [ $? ]; then
     echo "FAILED to copy postdeploy.sh" | indent
+    exit 1
+fi
+
+cp ${BUILD_DIR}/reference/${APP_REFERENCE}/.buildpacks ${BUILD_DIR}/.buildpacks
+
+if ! [ $? ]; then
+    echo "FAILED to copy .buildpacks" | indent
     exit 1
 fi
 
