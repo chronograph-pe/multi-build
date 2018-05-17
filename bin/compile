@@ -10,6 +10,7 @@ ENV_DIR=$3
 
 PROCFILE=$(cat ${ENV_DIR}/PROCFILE)
 NGINXCONF=$(cat ${ENV_DIR}/NGINXCONF)
+APPJSON=$(cat ${ENV_DIR}/APPJSON)
 
 if [[ -z "${PROCFILE}" ]]; then
     echo "PROCFILE was not set. Aborting" | indent
@@ -18,6 +19,11 @@ fi
 
 if [[ -z "${NGINXCONF}" ]]; then
     echo "NGINXCONF was not set. Aborting" | indent
+    exit 1
+fi
+
+if [[ -z "${APPJSON}" ]]; then
+    echo "APPJSON was not set. Aborting" | indent
     exit 1
 fi
 
@@ -32,6 +38,13 @@ cp ${BUILD_DIR}/${NGINXCONF} ${BUILD_DIR}/config/nginx.conf.erb
 
 if ! [ $? ]; then
     echo "FAILED to copy nginx.conf.erb" | indent
+    exit 1
+fi
+
+cp ${BUILD_DIR}/${APPJSON} ${BUILD_DIR}/app.json
+
+if ! [ $? ]; then
+    echo "FAILED to copy app.json" | indent
     exit 1
 fi
 
