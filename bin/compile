@@ -29,7 +29,7 @@ if ! [ $? ]; then
     exit 1
 fi
 
-cp ${BUILD_DIR}/reference/${APP_REFERENCE}/postdeploy.sh ${BUILD_DIR}/postdeploy.sh
+cp -p ${BUILD_DIR}/reference/${APP_REFERENCE}/postdeploy.sh ${BUILD_DIR}/postdeploy.sh
 
 if ! [ $? ]; then
     echo "FAILED to copy postdeploy.sh" | indent
