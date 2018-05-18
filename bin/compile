@@ -9,10 +9,6 @@ CACHE_DIR=$2
 ENV_DIR=$3
 
 APP_REFERENCE=$(cat ${ENV_DIR}/APP_REFERENCE)
-HEROKU_APP_NAME=$(cat ${ENV_DIR}/HEROKU_APP_NAME)
-
-echo "multi-build"
-echo ${HEROKU_APP_NAME}
 
 if [[ -z "${APP_REFERENCE}" ]]; then
     echo "APP_REFERENCE was not set. Aborting" | indent
