@@ -8,7 +8,9 @@ BUILD_DIR=$1
 CACHE_DIR=$2
 ENV_DIR=$3
 
-APP_REFERENCE=$(cat ${ENV_DIR}/APP_REFERENCE)
+if [[ -z "${APP_REFERENCE}" ]]; then
+    APP_REFERENCE=$(cat ${ENV_DIR}/APP_REFERENCE)
+fi
 
 if [[ -z "${APP_REFERENCE}" ]]; then
     echo "APP_REFERENCE was not set. Aborting" | indent
